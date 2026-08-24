@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>¿Qué programa es para ti? · EPG USIL</title>
+<meta name="description" content="Test vocacional para colaboradores USIL: descubre si tu siguiente paso es una maestría, doctorado, segunda especialidad, programa o curso especializado." />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">EPG · USIL</span>
+        <span class="brand-sub">Test vocacional</span>
+      </div>
+      <div class="step-count" id="stepCount"></div>
+    </header>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <main class="stage" id="stage">
+      <!-- El contenido de cada paso se inyecta aquí vía JS -->
+    </main>
+
+    <footer class="app-footer">
+      Escuela de Posgrado — Universidad San Ignacio de Loyola
+    </footer>
+  </div>
+
+  <!-- Librerías para leer CV (PDF / Word) 100% en el navegador, sin IA ni backend -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/questions.js"></script>
+  <script src="js/cv-parser.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/submit.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
