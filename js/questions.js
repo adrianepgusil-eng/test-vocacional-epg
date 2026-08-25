@@ -66,7 +66,7 @@ const STEPS = [
   {
     id: "titulo_regulado",
     type: "scored",
-    title: "¿Cuentas con título profesional (no solo bachiller, sino el título sustentado) en un campo como derecho, salud, psicología o educación?",
+    title: "¿Cuentas con título profesional en un campo como derecho, salud, psicología o educación?",
     options: [
       { text: "Sí, tengo título profesional en uno de esos campos", points: { M: 0, D: 0, S: 3, P: 0, C: 0 } },
       { text: "Tengo el bachiller, pero aún no el título profesional", points: { M: 1, D: 0, S: 0, P: 1, C: 1 } },
