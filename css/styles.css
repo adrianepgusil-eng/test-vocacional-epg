@@ -590,11 +590,25 @@ body {
 
 .program-card:nth-child(1) .program-rank { color: var(--blue); }
 
+.program-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .program-name {
   font-size: 15.5px;
   font-weight: 600;
   color: var(--ink);
   line-height: 1.35;
+}
+
+.program-type {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--blue);
 }
 
 .result-footer {

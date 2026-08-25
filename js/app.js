@@ -519,7 +519,10 @@ function renderResult(result, topPrograms, submission) {
       card.className = "program-card";
       card.innerHTML = `
         <span class="program-rank">${i + 1}</span>
-        <span class="program-name">${p.nombre}</span>
+        <span class="program-info">
+          <span class="program-name">${p.nombre}</span>
+          <span class="program-type">${TIPO_LABEL_BY_DATA[p.tipo] || p.tipo}</span>
+        </span>
       `;
       cards.appendChild(card);
     });
@@ -536,6 +539,11 @@ function renderResult(result, topPrograms, submission) {
   stage.appendChild(view);
   stepCountEl.textContent = "";
 }
+
+const TIPO_LABEL_BY_DATA = Object.values(TIPOS).reduce((acc, t) => {
+  acc[t.dataTipo] = t.label;
+  return acc;
+}, {});
 
 const RESULT_COPY = {
   M: "Buscas dar un salto en tu carrera con un grado académico que combine visión estratégica y gestión. Una maestría te da el marco y la red para llegar a posiciones de mayor liderazgo.",
