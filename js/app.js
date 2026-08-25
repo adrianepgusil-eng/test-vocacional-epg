@@ -110,9 +110,27 @@ function renderDatosStep(step) {
   group.className = "field-group";
 
   const fields = [
-    { key: "nombre", label: "Nombres y apellidos", type: "text", placeholder: "Ej. María Fernández" },
-    { key: "telefono", label: "Celular / WhatsApp", type: "tel", placeholder: "Ej. 987 654 321" },
-    { key: "correo", label: "Correo institucional", type: "email", placeholder: "Ej. nombre@usil.pe" },
+    {
+      key: "nombre",
+      label: "Nombres y apellidos",
+      type: "text",
+      placeholder: "Ej. María Fernández",
+      validate: (v) => (v.trim().length > 1 ? "" : "Ingresa tu nombre completo."),
+    },
+    {
+      key: "telefono",
+      label: "Celular / WhatsApp",
+      type: "tel",
+      placeholder: "Ej. 987 654 321",
+      validate: (v) => (v.trim().length >= 6 ? "" : "Ingresa un número de celular válido."),
+    },
+    {
+      key: "correo",
+      label: "Correo institucional",
+      type: "email",
+      placeholder: "Ej. nombre@usil.edu.pe",
+      validate: (v) => (/\S+@\S+\.\S+/.test(v.trim()) ? "" : "Ingresa un correo válido."),
+    },
   ];
 
   fields.forEach((f) => {
@@ -120,8 +138,8 @@ function renderDatosStep(step) {
     fieldEl.className = "field";
 
     const label = document.createElement("label");
-    label.textContent = f.label;
     label.setAttribute("for", `field-${f.key}`);
+    label.innerHTML = `${f.label} <span class="req-mark">*</span>`;
 
     const input = document.createElement("input");
     input.type = f.type;
@@ -129,13 +147,31 @@ function renderDatosStep(step) {
     input.placeholder = f.placeholder;
     input.value = state.datos[f.key];
     input.autocomplete = "off";
+    input.required = true;
+
+    const error = document.createElement("div");
+    error.className = "field-error";
+    error.id = `error-${f.key}`;
+
     input.addEventListener("input", (e) => {
       state.datos[f.key] = e.target.value;
+      if (input.classList.contains("invalid")) {
+        const msg = f.validate(e.target.value);
+        input.classList.toggle("invalid", !!msg);
+        error.textContent = msg;
+      }
       refreshNavState();
+    });
+
+    input.addEventListener("blur", (e) => {
+      const msg = f.validate(e.target.value);
+      input.classList.toggle("invalid", !!msg);
+      error.textContent = msg;
     });
 
     fieldEl.appendChild(label);
     fieldEl.appendChild(input);
+    fieldEl.appendChild(error);
     group.appendChild(fieldEl);
   });
 
@@ -504,7 +540,7 @@ function renderResult(result, topPrograms, submission) {
 const RESULT_COPY = {
   M: "Buscas dar un salto en tu carrera con un grado académico que combine visión estratégica y gestión. Una maestría te da el marco y la red para llegar a posiciones de mayor liderazgo.",
   D: "Tu motor es generar conocimiento nuevo: investigar, publicar y enseñar al más alto nivel. Un doctorado es el camino natural para profundizar en tu campo.",
-  S: "Ya tienes una formación profesional sólida y buscas la certificación oficial que reconoce tu expertise dentro de tu colegio profesional. Una segunda especialidad formaliza ese siguiente nivel.",
+  S: "Ya tienes una formación profesional sólida y buscas profundizar y certificar oficialmente tu expertise dentro de tu propia carrera. Una segunda especialidad formaliza ese siguiente nivel.",
   P: "Quieres actualizarte de forma rigurosa en un tema concreto de gestión, liderazgo o tecnología, sin necesariamente buscar un grado académico. Un programa especializado te da profundidad práctica en poco tiempo.",
   C: "Necesitas una herramienta o habilidad puntual, aplicable de inmediato en tu trabajo. Un curso de especialización es la forma más rápida de lograrlo.",
 };

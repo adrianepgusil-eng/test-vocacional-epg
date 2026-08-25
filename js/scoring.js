@@ -4,7 +4,7 @@
 const CV_KEYWORDS = {
   M: ["mba", "maestria", "gerente", "gerencia", "gestion estrategica", "director", "jefatura", "jefe de", "subgerente"],
   D: ["doctorado", "phd", "ph.d", "investigador", "investigacion cientifica", "publicaciones", "paper", "articulo cientifico", "docente universitario", "tesis doctoral", "scopus", "scielo", "postdoctoral"],
-  S: ["segunda especialidad", "colegiatura", "colegio de abogados", "colegio de psicologos", "colegio medico", "cmp", "residentado", "especialidad medica", "titulo profesional"],
+  S: ["segunda especialidad", "residentado", "especialidad medica", "titulo profesional", "especialista en"],
   P: ["diplomado", "programa especializado", "certificacion profesional", "gestion de proyectos", "transformacion digital", "certificado internacional"],
   C: ["curso", "taller", "workshop", "capacitacion", "webinar", "bootcamp"],
 };
