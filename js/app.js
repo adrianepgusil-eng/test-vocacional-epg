@@ -535,9 +535,102 @@ function renderResult(result, topPrograms, submission) {
     "Un asesor de la Escuela de Posgrado se pondrá en contacto contigo para contarte más sobre estos programas y sus próximas fechas de inicio.";
   view.appendChild(footer);
 
+  const waTargets = getWhatsappTargets(topPrograms);
+  if (waTargets.length) {
+    const waSection = document.createElement("div");
+    waSection.className = "whatsapp-section";
+
+    const waIntro = document.createElement("div");
+    waIntro.className = "whatsapp-intro";
+    waIntro.textContent = "¿Prefieres escribir tú mismo/a? Contáctanos por WhatsApp:";
+    waSection.appendChild(waIntro);
+
+    const waButtons = document.createElement("div");
+    waButtons.className = "whatsapp-buttons";
+
+    waTargets.forEach((wa) => {
+      const waItem = document.createElement("div");
+      waItem.className = "whatsapp-item";
+
+      const waCaption = document.createElement("div");
+      waCaption.className = "whatsapp-caption";
+      waCaption.textContent = wa.label;
+
+      const waLink = document.createElement("a");
+      waLink.className = "btn btn-whatsapp";
+      waLink.href = buildWhatsappUrl(wa.number, state.datos.nombre, TIPOS[result.winnerKey].label, topPrograms[0]);
+      waLink.target = "_blank";
+      waLink.rel = "noopener";
+      waLink.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.15c-.24.68-1.4 1.3-1.93 1.36-.5.06-1.02.27-3.4-.71-2.87-1.19-4.72-4.1-4.86-4.29-.14-.19-1.16-1.55-1.16-2.95 0-1.4.73-2.09.99-2.38.26-.28.57-.35.76-.35h.55c.18 0 .42-.03.65.5.24.55.81 1.9.88 2.04.07.14.12.3.02.49-.1.19-.15.3-.29.46-.14.16-.3.36-.43.48-.14.14-.29.29-.13.57.17.29.75 1.24 1.61 2.01 1.11.99 2.04 1.3 2.33 1.44.29.14.46.12.63-.07.17-.19.72-.84.91-1.13.19-.29.38-.24.63-.14.26.1 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36z"/>
+        </svg>
+        <span>Escríbenos por WhatsApp</span>
+      `;
+
+      waItem.appendChild(waCaption);
+      waItem.appendChild(waLink);
+      waButtons.appendChild(waItem);
+    });
+
+    waSection.appendChild(waButtons);
+    view.appendChild(waSection);
+  }
+
   stage.innerHTML = "";
   stage.appendChild(view);
   stepCountEl.textContent = "";
+}
+
+// Decide a qué número(s) de WhatsApp mandar al colaborador, revisando
+// los 3 programas recomendados (no solo el #1), porque aunque los 3
+// comparten el mismo tipo, pueden pertenecer a ejes distintos si no
+// había suficientes programas de esa categoría dentro del área elegida.
+//   - Programa/Curso/Maestría/Doctorado del eje Educación -> Facultad de Educación
+//   - Programa Especializado o Curso de Especialización (cualquier otro eje) -> Programas y Cursos
+//   - Maestría, Doctorado o Segunda Especialidad (cualquier otro eje) -> Posgrados
+// Devuelve una lista sin duplicados, en el orden en que aparecen entre
+// los 3 programas recomendados.
+function targetForPrograma(programa) {
+  const numbers = (typeof CONFIG !== "undefined" && CONFIG.WHATSAPP) || {};
+  const esEducacion = programa.eje === "EDUCACIÓN" && programa.tipo !== "SEGUNDA ESPECIALIDAD";
+
+  if (esEducacion && numbers.FACULTAD_EDUCACION) {
+    return { number: numbers.FACULTAD_EDUCACION, label: "Facultad de Educación" };
+  }
+  if (
+    (programa.tipo === "PROGRAMA ESPECIALIZADO" || programa.tipo === "CURSO DE ESPECIALIZACIÓN") &&
+    numbers.PROGRAMAS_Y_CURSOS
+  ) {
+    return { number: numbers.PROGRAMAS_Y_CURSOS, label: "Programas y Cursos" };
+  }
+  if (numbers.POSGRADOS) {
+    return { number: numbers.POSGRADOS, label: "Maestrías, Doctorados y Segunda Especialidad" };
+  }
+  return null;
+}
+
+function getWhatsappTargets(topPrograms) {
+  const seen = new Set();
+  const targets = [];
+  (topPrograms || []).forEach((p) => {
+    const t = targetForPrograma(p);
+    if (t && !seen.has(t.number)) {
+      seen.add(t.number);
+      targets.push(t);
+    }
+  });
+  return targets;
+}
+
+function buildWhatsappUrl(number, nombre, tipoLabel, topProgram) {
+  const primerNombre = (nombre || "").trim().split(" ")[0] || "";
+  let mensaje = `Hola, soy ${primerNombre || "un colaborador de USIL"}. Hice el test vocacional de EPG y mi resultado fue: ${tipoLabel}`;
+  if (topProgram) {
+    mensaje += ` (${topProgram.nombre})`;
+  }
+  mensaje += ". Quisiera más información.";
+  return `https://wa.me/51${number}?text=${encodeURIComponent(mensaje)}`;
 }
 
 const TIPO_LABEL_BY_DATA = Object.values(TIPOS).reduce((acc, t) => {

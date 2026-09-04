@@ -44,10 +44,10 @@ const STEPS = [
     type: "scored",
     title: "¿Cuál es tu objetivo principal ahora?",
     options: [
-      { text: "Prepararme para asumir más responsabilidad, liderazgo o un puesto directivo", points: { M: 3, D: 0, S: 0, P: 1, C: 0 } },
+      { text: "Dar el salto a un cargo directivo o gerencial en los próximos años", points: { M: 3, D: 0, S: 0, P: 1, C: 0 } },
       { text: "Dedicarme a investigar y enseñar a nivel universitario", points: { M: 0, D: 3, S: 0, P: 0, C: 0 } },
       { text: "Profundizar y especializarme más a fondo en mi propia profesión", points: { M: 0, D: 0, S: 3, P: 1, C: 0 } },
-      { text: "Fortalecer una habilidad de gestión, liderazgo o tecnología que ya uso en mi trabajo", points: { M: 0, D: 0, S: 0, P: 3, C: 1 } },
+      { text: "Perfeccionar una herramienta o metodología puntual que ya aplico en mi trabajo (ej. gestión de proyectos, marketing digital, finanzas...)", points: { M: 0, D: 0, S: 0, P: 3, C: 1 } },
       { text: "Aprender algo puntual que pueda aplicar de inmediato", points: { M: 0, D: 0, S: 0, P: 1, C: 3 } },
     ],
   },
